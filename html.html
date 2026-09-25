@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlueCode 的主页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #a8cfff;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.95), transparent 42%),
+                radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.55), transparent 38%),
+                radial-gradient(circle at 88% 90%, rgba(255, 255, 255, 0.45), transparent 40%),
+                linear-gradient(135deg, #9fc7ff, #b8dcff);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 36px 36px;
+            pointer-events: none;
+            z-index: 0;
+            -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 55%, transparent 100%);
+            mask-image: radial-gradient(circle at 50% 50%, #000 55%, transparent 100%);
+        }
+
+        .card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 720px;
+            background: #fff;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow:
+                0 1px 2px rgba(0, 0, 0, 0.04),
+                0 12px 32px rgba(31, 64, 120, 0.16),
+                0 2px 8px rgba(31, 64, 120, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            display: flex;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow:
+                0 2px 4px rgba(0, 0, 0, 0.06),
+                0 20px 48px rgba(31, 64, 120, 0.22),
+                0 4px 12px rgba(31, 64, 120, 0.1);
+        }
+
+        .card-left {
+            width: 200px;
+            flex-shrink: 0;
+            background: #fafcff;
+            border-right: 1px solid #eef3f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 28px 16px;
+        }
+
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            object-fit: cover;
+            margin-bottom: 14px;
+            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.3);
+        }
+
+        .card-left .name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+
+        .card-left .title {
+            font-size: 12px;
+            color: #7f8c8d;
+            text-align: center;
+        }
+
+        .card-right {
+            flex: 1;
+            padding: 26px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .bio {
+            font-size: 13px;
+            color: #5a6a7a;
+            line-height: 1.7;
+            margin-bottom: 18px;
+            padding-bottom: 16px;
+            border-bottom: 1px dashed #e8e8e8;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 20px;
+            margin-bottom: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #34495e;
+            min-width: 0;
+        }
+
+        .contact-item .label {
+            color: #95a5a6;
+            flex-shrink: 0;
+        }
+
+        .contact-item a,
+        .contact-item span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .contact-item a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 22px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        /* 纯蓝按钮，和整体蓝色调统一 */
+        .btn-primary {
+            background: #4facfe;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.35);
+        }
+
+        .btn-primary:hover {
+            background: #2f9bfe;
+            box-shadow: 0 6px 18px rgba(79, 172, 254, 0.5);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 620px) {
+            .card {
+                flex-direction: column;
+                max-width: 380px;
+                border-radius: 6px;
+            }
+            .card-left {
+                width: 100%;
+                padding: 24px 16px;
+                border-right: none;
+                border-bottom: 1px solid #eef3f9;
+            }
+            .card-right {
+                padding: 22px 22px;
+            }
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            .card-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+
+        <div class="card-left">
+            <img class="avatar" src="picture/picture.webp" alt="1273514">
+            <div class="name">BlueCode</div>
+            <div class="title">想写小说的 OIer</div>
+        </div>
+
+        <div class="card-right">
+            <p class="bio">
+                请使用他称呼这个蒟蒻 | KARDS，florr，蛋仔，术曲爱好者 | 无蓝勾不改签
+            </p>
+
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <span class="label">QQ</span>
+                    <span>3938365292</span>
+                </div>
+                <div class="contact-item">
+                    <span class="label">生日</span>
+                    <span>2013-10-07</span>
+                </div>
+                <div class="contact-item">
+                    <span class="label">GitHub</span>
+                    <a href="https://github.com/BlueCode-1273514" target="_blank">BlueCode-1273514</a>
+                </div>
+                <div class="contact-item">
+                    <span class="label">洛谷</span>
+                    <a href="https://www.luogu.com.cn/user/1273514" target="_blank">BlueCode</a>
+                </div>
+                <div class="contact-item">
+                    <span class="label">rngdle</span>
+                    <a href="https://www.rngdle.com/u/bluecode" target="_blank">bluecode</a>
+                </div>
+                <div class="contact-item">
+                    <span class="label">rngdle2</span>
+                    <a href="https://www.rngdle.com/u/codeblue" target="_blank">codeblue</a>
+                </div>
+            </div>
+
+            <div class="card-actions">
+                <a class="btn btn-primary" href="mailto:qpio1089@outlook.com">发邮件</a>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
