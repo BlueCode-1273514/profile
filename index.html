@@ -176,6 +176,7 @@
         .contact-item a {
             color: #3498db;
             text-decoration: none;
+            transition: color 0.8s ease;
         }
 
         .contact-item a:hover {
@@ -194,7 +195,7 @@
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.8s ease;
             text-align: center;
             text-decoration: none;
             display: inline-block;
@@ -232,6 +233,24 @@
             border-radius: 4px;
             outline: none;
             min-width: 0;
+        }
+
+        /* ===== 彩蛋：播放时所有蓝色元素变粉色 ===== */
+
+        /* 超链接变粉色 */
+        body.pink-mode .contact-item a {
+            color: #e84393;
+        }
+
+        /* 发邮件按钮变粉色 */
+        body.pink-mode .btn-primary {
+            background: #ff6fb5;
+            box-shadow: 0 4px 12px rgba(255, 111, 181, 0.4);
+        }
+
+        body.pink-mode .btn-primary:hover {
+            background: #ff4da6;
+            box-shadow: 0 6px 18px rgba(255, 111, 181, 0.55);
         }
 
         @media (max-width: 620px) {
