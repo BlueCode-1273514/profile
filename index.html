@@ -23,6 +23,20 @@
             padding: 24px;
             position: relative;
             overflow: hidden;
+            transition: background 0.8s ease;
+        }
+
+        /* 彩蛋：播放时淡粉色 */
+        body.pink-mode {
+            background: #ffd6e8;
+        }
+
+        body.pink-mode::before {
+            background:
+                radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.95), transparent 42%),
+                radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.55), transparent 38%),
+                radial-gradient(circle at 88% 90%, rgba(255, 255, 255, 0.45), transparent 40%),
+                linear-gradient(135deg, #ffb6d9, #ffd6e8);
         }
 
         body::before {
@@ -36,6 +50,7 @@
                 linear-gradient(135deg, #9fc7ff, #b8dcff);
             pointer-events: none;
             z-index: 0;
+            transition: background 0.8s ease;
         }
 
         body::after {
@@ -43,8 +58,8 @@
             position: fixed;
             inset: 0;
             background-image:
-                linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+                linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
             background-size: 36px 36px;
             pointer-events: none;
             z-index: 0;
@@ -170,6 +185,7 @@
         .card-actions {
             display: flex;
             gap: 12px;
+            margin-bottom: 16px;
         }
 
         .btn {
@@ -184,7 +200,6 @@
             display: inline-block;
         }
 
-        /* 纯蓝按钮，和整体蓝色调统一 */
         .btn-primary {
             background: #4facfe;
             color: #fff;
@@ -195,6 +210,28 @@
             background: #2f9bfe;
             box-shadow: 0 6px 18px rgba(79, 172, 254, 0.5);
             transform: translateY(-1px);
+        }
+
+        /* 音乐播放条 */
+        .music-player {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .music-player .music-label {
+            font-size: 13px;
+            color: #95a5a6;
+            flex-shrink: 0;
+        }
+
+        .music-player audio {
+            flex: 1;
+            height: 36px;
+            border-radius: 4px;
+            outline: none;
+            min-width: 0;
         }
 
         @media (max-width: 620px) {
@@ -266,9 +303,34 @@
             <div class="card-actions">
                 <a class="btn btn-primary" href="mailto:qpio1089@outlook.com">发邮件</a>
             </div>
+
+            <!-- 音乐播放条 -->
+            <div class="music-player">
+                <span class="music-label">音乐：</span>
+                <audio id="bgMusic" controls loop>
+                    <source src="music/music.mp3" type="audio/mpeg">
+                    你的浏览器不支持音频播放。
+                </audio>
+            </div>
         </div>
 
     </div>
+
+    <script>
+        var music = document.getElementById('bgMusic');
+
+        music.addEventListener('play', function() {
+            document.body.classList.add('pink-mode');
+        });
+
+        music.addEventListener('pause', function() {
+            document.body.classList.remove('pink-mode');
+        });
+
+        music.addEventListener('ended', function() {
+            document.body.classList.remove('pink-mode');
+        });
+    </script>
 
 </body>
 </html>
