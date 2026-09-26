@@ -389,13 +389,13 @@
                 var author = data.from_who || data.from || data.author || '佚名';
 
                 if (!text) {
-                    quoteEl.textContent = '又是开心的一天！';
+                    quoteEl.textContent = '今天也要加油呀！';
                     return;
                 }
 
                 quoteEl.textContent = text + ' —— ' + author;
             } catch (error) {
-                quoteEl.textContent = '又是开心的一天！';
+                quoteEl.textContent = '今天也要加油呀！';
             }
         }
 
