@@ -238,8 +238,48 @@
             min-width: 0;
         }
 
+        /* ===== 每日一句 ===== */
+        .daily-quote {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            background: #f8faff;
+            border-left: 3px solid #4facfe;
+            border-radius: 4px;
+            font-size: 13px;
+            line-height: 1.7;
+            transition: background 0.8s ease, border-color 0.8s ease;
+        }
+
+        .daily-quote .quote-label {
+            color: #4facfe;
+            font-weight: 600;
+            flex-shrink: 0;
+            white-space: nowrap;
+            transition: color 0.8s ease;
+        }
+
+        .daily-quote .quote-text {
+            color: #34495e;
+            flex: 1;
+            min-width: 0;
+        }
+
         /* ===== 播放时按钮和超链接变红 ===== */
-        body.pink-mode .contact-item a { color: #e74c3c; }
+        body.pink-mode .daily-quote {
+            background: #fff0f0;
+            border-left-color: #e74c3c;
+        }
+
+        body.pink-mode .daily-quote .quote-label {
+            color: #e74c3c;
+        }
+
+        body.pink-mode .contact-item a {
+            color: #e74c3c;
+        }
 
         body.pink-mode .btn-primary {
             background: #e74c3c;
@@ -288,6 +328,13 @@
         </div>
 
         <div class="card-right">
+
+            <!-- 每日一句 -->
+            <div class="daily-quote">
+                <span class="quote-label">今日一句</span>
+                <span class="quote-text" id="quoteText">加载中……</span>
+            </div>
+
             <p class="bio">
                 请使用他称呼这个蒟蒻 | KARDS，florr，蛋仔，术曲爱好者 | 无蓝勾不改签
             </p>
@@ -339,6 +386,11 @@
     </div>
 
     <script>
+        // ===== 配置 =====
+        var SUPABASE_URL = 'https://nnekudnbordbvikklfci.supabase.co';
+        var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5uZWt1ZG5ib3JkYnZpa2tsZmNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0MDU3MTMsImV4cCI6MjEwNTk4MTcxM30.1dlBtek7UJLCSlhCqXFN0Gox7AF58h05TCbO_ePH2qc';
+
+        // ===== 音乐彩蛋 =====
         var music = document.getElementById('bgMusic');
 
         music.addEventListener('play', function() {
@@ -352,6 +404,41 @@
         music.addEventListener('ended', function() {
             document.body.classList.remove('pink-mode');
         });
+
+        // ===== 每日一句（通过 Supabase Edge Function 代理 Hitokoto） =====
+        async function loadDailyQuote() {
+            var quoteEl = document.getElementById('quoteText');
+            try {
+                var response = await fetch(
+                    SUPABASE_URL + '/functions/v1/hitokoto',
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + SUPABASE_KEY
+                        }
+                    }
+                );
+
+                if (!response.ok) {
+                    quoteEl.textContent = '今天也要加油鸭！';
+                    return;
+                }
+
+                var data = await response.json();
+
+                if (!data.hitokoto) {
+                    quoteEl.textContent = '今天也要加油鸭！';
+                    return;
+                }
+
+                var author = data.from_who || data.from || '佚名';
+                quoteEl.textContent = data.hitokoto + ' —— ' + author;
+            } catch (error) {
+                quoteEl.textContent = '今天也要加油鸭！';
+            }
+        }
+
+        loadDailyQuote();
     </script>
 
 </body>
